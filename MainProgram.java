@@ -1,9 +1,6 @@
-﻿import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+﻿import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -424,7 +421,7 @@ class item implements Serializable{
 		return this.price;
 	}
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 class Accountbook { // 가계부 관리 메뉴
 	public static int i=0;
 	public static void mainaccount(Vector<item> v)throws Exception{
@@ -463,8 +460,8 @@ class Accountbook { // 가계부 관리 메뉴
 				}
 		}
 	}
-/*---------------------------------------------------------------------------------------------*/
-	private static void deleteaccount(Vector<item> v) throws IOException { // 구입 내역 삭제
+
+	public static void deleteaccount(Vector<item> v) throws IOException { // 구입 내역 삭제
 		Scanner scan = new Scanner(System.in);
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("accountbook"));
 		if(v.size()==0){
@@ -496,21 +493,21 @@ class Accountbook { // 가계부 관리 메뉴
 		oos.writeObject(v);
 		oos.close();
 	}
-/*---------------------------------------------------------------------------------------------*/	
-	private static void updateaccount(Vector<item> v) throws IOException{	// 가계부 업데이트
+	
+	public static void updateaccount(Vector<item> v) throws IOException{	// 가계부 업데이트
 		Scanner scan = new Scanner(System.in);
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("accountbook"));
 		if(v.size()==0){
-            	System.out.println("수정할 품목이 없습니다. ");
-            	return;
+            System.out.println("수정할 품목이 없습니다. ");
+            return;
 		}
 		System.out.println("수정할 구입내역의 번호를 입력하세요. ");
-		int day, price, num;
-		String name;
+		 
+		int num;
 		do{
 			num = scan.nextInt()-1;
 			if(num<0 || num >v.size()-1)
-            			System.out.println("번호를 다시 입력하세요.");
+            	System.out.println("번호를 다시 입력하세요.");
 		}while(num<0 || num >v.size()-1);
 		
 		System.out.println("번호\t구입날짜 \t상품명\t상품가격   ");
@@ -518,31 +515,42 @@ class Accountbook { // 가계부 관리 메뉴
 				,i+1,v.get(i).getday(),v.get(i).getname(),v.get(i).getprice());	
 		System.out.println("수정할 항목의 번호를 입력하세요.");
 		System.out.println("1.구입날짜\n2.상품명\n3.상품가격");
-		int cas;
 		
+		int cas;
 		do{
 			cas=scan.nextInt();
-			if(cas==1){
-				System.out.println("구입날짜:");
-				day = scan.nextInt();
-				v.get(num).setday(day);
-			}else if(cas==2){
-				System.out.println("상품명:");
-				name = scan.next();
-				v.get(num).setname(name);
-			}else if (cas==3){
-				System.out.println("상품가격:");
-				price = scan.nextInt();
-				v.get(num).setprice(price);
-			}else{
-				System.out.println("1번~3번 사이에서 입력해주세요.");
-			}	
-			}while(cas<1||cas>3);
+			v= update(v,num,cas);
+			
+		}while(cas<1||cas>3);
 		oos.writeObject(v);
 		oos.close();
 		return;
 	}
-/*---------------------------------------------------------------------------------------------*/	
+	
+	public static Vector<item> update(Vector<item> v,int num,int cas){
+		Scanner scan = new Scanner(System.in);
+		int day, price;
+		String name;
+		if(cas==1){
+			System.out.println("구입날짜:");
+			day = scan.nextInt();
+			v.get(num).setday(day);
+		}else if(cas==2){
+			System.out.println("상품명:");
+			name = scan.next();
+			v.get(num).setname(name);
+		}else if (cas==3){
+			System.out.println("상품가격:");
+			price = scan.nextInt();
+			v.get(num).setprice(price);
+		}else{
+			System.out.println("1번~3번 사이에서 입력해주세요.");
+		}
+		return v;
+		
+	}
+		
+	
 	public static void addaccount(Vector<item> v) throws IOException{	// 가계부 작성
 		Scanner scan = new Scanner(System.in);
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("accountbook"));
@@ -555,14 +563,17 @@ class Accountbook { // 가계부 관리 메뉴
 		name = scan.next();
 		System.out.print("상품가격:" );
 		price = scan.nextInt();
-		item i1 = new item(day,name,price);
-		v.add(i1);
+		v = adding(v,day,name,price);
 		oos.writeObject(v);
 		oos.close();
 		return;
 	}
+	public static Vector<item> adding(Vector<item> v,int day,String name,int price){
+		item i1 = new item(day,name,price);
+		v.add(i1);
+		return v;
+	}
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
 public class MainProgram {	//	메인 메뉴
 
 	public static void main(String[] args) throws Exception {
@@ -603,3 +614,4 @@ public class MainProgram {	//	메인 메뉴
 		}
 		}
 	}
+
