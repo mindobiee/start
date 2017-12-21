@@ -579,14 +579,12 @@ public class MainProgram {	//	메인 메뉴
 	public static void main(String[] args) throws Exception {
 		Scanner scan = new Scanner (System.in);
 		Vector v = new Vector();
-		////////////////////////////////////////////////////////////////////
 		Vector<item> v2 = new Vector<item>();
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream("accountbook"));
 		Object s2;
 		if (ois.read()!=-1)
 			 s2 = ois.readObject();
 		v2 = (Vector<item>)ois.readObject();
-		////////////////////////////////////////////////////////////////////////
 		while (true) {
 		System.out.printf("========= MENU =========%n"
 				+ "1. Memo manager (메모관리)%n"
@@ -603,7 +601,7 @@ public class MainProgram {	//	메인 메뉴
 			new calculator();
 			}// 계산기 메뉴 호출
 		else if (sel==3){
-            Accountbook.mainaccount(v2);
+			Accountbook.mainaccount(v2);
             }// 가계부 메뉴 호출
 		else if (sel==4) { // 종료
 			break;
