@@ -1,0 +1,77 @@
+public class swTest {	//	메인 메뉴
+
+	@SuppressWarnings("unchecked")
+	public static void main(String[] args) throws Exception, ClassNotFoundException{
+		Scanner scan = new Scanner (System.in);
+		Vector v = new Vector();
+		////////////////////////////////////////////////////////////////////
+		//일단 이 상태로 처음에 두어야지 돌아감.
+		Vector<item> v2 = new Vector<item>();
+		
+		//account.txt 생성하기...??
+		String string = "account.txt";// 처음에 추가해야함..??
+		File f1 = new File("./",string);
+		if (!f1.exists()){
+			f1.createNewFile();
+			System.out.println("해당 파일이 존재하지 않다.");
+		}else 
+			System.out.println("해당 파일이 존재한다.");
+		
+		ObjectOutputStream oos = new  ObjectOutputStream(new FileOutputStream(string)); //새로 추가
+		//oos.flush();//새로 추가!! close()할 때 저절로 되게 됨.
+		
+		oos.writeObject(v2);
+		oos.close();
+		//메인에서 스트림을 여는 이유: 이전에 저장했던 것을 파일에서 꺼내어 입력하기 위해서.
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream("account.txt"));
+		//Object s2;
+		
+		if (ois.available()>0){ //파일에 저장되어 있는게 있다면...
+			//s2 = ois.readObject();
+			v2 = (Vector<item>) ois.readObject(); 
+			System.out.printf("객체 v를 읽어들임.\n");//? - 여기에 있어야지만 실행됨 (처음에)
+			ois.close();
+		//이전 스트림에 저장된 것을 읽어들인다.
+		}else{//없다면... 읽어들이지 않는다...?(이론적으로는)
+			System.out.println("파일에  객체가 저장되어 있지 않다.");
+			ois.close();
+		}
+		//v2 = (Vector<item>) ois.readObject(); //? obsolete Method? 뜨더니 몇번 다시 켰다 끄니 성공함.
+		//근데 잘못된 값(예- int에 스트링) 넣으니 다시 안됨. -> 지우고 ois.available()>0 조건 안에 넣으니 돌아감!ㅜㅜ(근데 파일 저장이 안됨)
+		//<오류> ; at java.io.ObjectInputStream.readObject(Unknown Source) java.io.EOFException
+		//ois.close();
+		/*
+		 *
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream("accountbook"));
+		Object s2;
+		if (ois.read()!=-1)
+			 s2 = ois.readObject();
+		v2 = (Vector<item>)ois.readObject();*/
+		////////////////////////////////////////////////////////////////////////
+		while (true) {
+		System.out.printf("========= MENU =========%n"
+				+ "1. Memo manager (메모관리)%n"
+				+ "2. Calculator (계산기)%n"
+				+ "3. Account book (가계부)%n"
+				+ "4. Exit (종료)%n"
+				+ "========================%n");
+		System.out.printf("메뉴 번호 입력: ");
+		int sel = scan.nextInt();	// 번호 입력
+		if (sel==1) {
+			MemoManager.domanagememo(v);
+			}// 메모관리 메뉴 호출
+		else if (sel==2){
+			new calculator();
+			}// 계산기 메뉴 호출
+		else if (sel==3){
+				Accountbook.mainaccount(v2);
+            }// 가계부 메뉴 호출
+		else if (sel==4) { // 종료
+			break;
+			}
+		else {
+			System.out.println("다시 입력하세요. ");
+			}
+		}
+		}
+	}
