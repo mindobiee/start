@@ -428,33 +428,34 @@ class Accountbook { // 가계부 관리 메뉴
 	public static void mainaccount()throws Exception{
 			
 		Scanner scan = new Scanner(System.in);
-    Vector<item> v = new Vector<item>();
+    		Vector<item> v = new Vector<item>();
 		int number=1;
 		String string = "account.txt";
 		/*---------------------InputStream-----------------------------------*/ 
 		Object obj = null;  
-	    FileInputStream fis = null; 
-	    ObjectInputStream ois = null; 
-	      try 
-	      { 
-	         fis = new FileInputStream(string); 
-	         ois = new ObjectInputStream(fis); 
-	         while ((obj = ois.readObject()) != null) 
-	         {
-	        	 v=(Vector<item>)obj;
-	         } 
-	         fis.close(); 
-	         ois.close(); 
-	      } catch (ClassNotFoundException cnfe){}
+	    	FileInputStream fis = null; 
+	   	ObjectInputStream ois = null; 
+	      	try 
+	      	{
+	         	fis = new FileInputStream(string); 
+	      		ois = new ObjectInputStream(fis); 
+	         	while ((obj = ois.readObject()) != null) 
+	         	{
+	        		 v=(Vector<item>)obj;
+	         	} 
+	         	fis.close(); 
+	         	ois.close(); 
+			
+	      	}catch (ClassNotFoundException cnfe){}
 	      	catch (IOException e){} 	
-	  /*---------------------InputStream-----------------------------------*/ 
+	  	/*---------------------InputStream-----------------------------------*/ 
 	      
-		while(number!=4){
+		while(number!=4){ 
 			System.out.println("========= <Purchase List> ========");
 			System.out.println("번호\t구입날짜 \t상품명\t상품가격   ");
 			for(int i=0;i<v.size();i++){
 				System.out.printf("[%d]%10d%10s%10d\n"
-						,i+1,v.get(i).getday(),v.get(i).getname(),v.get(i).getprice());	
+					,i+1,v.get(i).getday(),v.get(i).getname(),v.get(i).getprice());	
 			}
 			System.out.println("=================================\n");
 			System.out.println("========== <가계부 관리 메뉴> ==========");
@@ -462,7 +463,7 @@ class Accountbook { // 가계부 관리 메뉴
 			System.out.println("=================================\n");
 			System.out.print("메뉴 번호 입력: ");
 			number = scan.nextInt();
-		////////////////////////////////////////////////////////////////////////////////	
+			
 			switch(number){
 			case 1:
 				Accountbook.addaccount(v);
@@ -478,35 +479,37 @@ class Accountbook { // 가계부 관리 메뉴
 			default:
 				System.out.println("1-4 사이에서 입력해주세요");
 				break;
-				}
+			}
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static void deleteaccount(Vector<item> v) /*throws IOException */{ // 구입 내역 삭제
+	public static void deleteaccount(Vector<item> v) { // 구입 내역 삭제
 		Scanner scan = new Scanner(System.in);
 		/*-----------------------OutputStream------------------------------*/ 
 		String string = "account.txt";
-	    FileOutputStream fos = null; 
-	    ObjectOutputStream oss = null; 
-	      try 
-	      { 
-	         if(new File(string).exists())
-	         { 
-	            fos = new FileOutputStream(string, true);     
-	            oss = new MyObjectOutputStream(fos);
-	         }else 
-	         { 
-	            fos = new FileOutputStream(string, true);     
-	            oss = new ObjectOutputStream(fos); 
-	         }
-	         v= delete(v);
-	         oss.writeObject(v);
-	         oss.flush(); 
-	         oss.close(); 
-	         fos.close(); 
-	      } catch (FileNotFoundException e) 
+	    	FileOutputStream fos = null; 
+	    	ObjectOutputStream oss = null; 
+	     	try 
+	      	{ 
+	         	if(new File(string).exists())
+	         	{ 
+	            		fos = new FileOutputStream(string, true);     
+	            		oss = new MyObjectOutputStream(fos);
+	         	}else{ 
+	           		fos = new FileOutputStream(string, true);     
+	            		oss = new ObjectOutputStream(fos); 
+	         	}
+	         	v= delete(v);
+		
+	         	oss.writeObject(v);
+	         	oss.flush(); 
+	         	oss.close(); 
+	         	fos.close(); 
+			
+	      }catch (FileNotFoundException e) 
 	      { 
 	         e.printStackTrace(); 
+			
 	      } catch (IOException e) 
 	      { 
 	         e.printStackTrace(); 
@@ -516,27 +519,31 @@ class Accountbook { // 가계부 관리 메뉴
 	public static Vector<item> delete(Vector<item> v){
 		Scanner scan = new Scanner(System.in);
 		if(v.size()==0){
-            	System.out.println("삭제할 품목이 없습니다.");
-            	return v;
+            		System.out.println("삭제할 품목이 없습니다.");
+            		return v;
 		}
 		System.out.print("삭제할 구입내역의 번호를 입력하세요. ");
 		int num;
 		do{
 			num = scan.nextInt()-1;
 			if(num<0 || num >v.size()-1)
-            		System.out.println("번호를 다시 입력하세요.");
+            			System.out.println("번호를 다시 입력하세요.");
+			
 		}while(num<0 || num >v.size()-1);
+		
 		System.out.println("번호\t구입날짜 \t상품명\t상품가격   ");
 		System.out.printf("[%d]%10d%10s%10d\n"
 				,i+1,v.get(i).getday(),v.get(i).getname(),v.get(i).getprice());	
 		System.out.println("정말 삭제하시겠습니까?(Y/N)");
 		String ans = scan.next();
+		
 		while(true){
 			if(ans.equals("Y")||ans.equals("y")||ans.equals("N")||ans.equals("n")){
 				if(ans.equals("Y")||ans.equals("y")){
 					v.remove(num);
 					break;
-				}else if(ans.equals("N")||ans.equals("n")) return v;
+				}else if(ans.equals("N")||ans.equals("n"))
+					return v;
 			}
 			System.out.print("다시 입력하세요.(Y/N)");
 			ans = scan.next();
@@ -545,77 +552,90 @@ class Accountbook { // 가계부 관리 메뉴
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public static void updateaccount(Vector<item> v) throws IOException{	// 가계부 업데이트
+		
 		Scanner scan = new Scanner(System.in);
 		String string = "account.txt";
-	    FileOutputStream fos = null; 
-	    ObjectOutputStream oss = null; 
-	      try 
-	      { 
-	         if(new File(string).exists())
-	         { 
-	            fos = new FileOutputStream(string, true);     
-	            oss = new MyObjectOutputStream(fos);
-	         }else 
-	         {
-	            fos = new FileOutputStream(string, true);     
-	            oss = new ObjectOutputStream(fos); 
-	         }
-	 		    if(v.size()==0){
-	             System.out.println("수정할 품목이 없습니다. ");
-	             return;
-	 		     }
-	 		     System.out.println("수정할 구입내역의 번호를 입력하세요. ");
+	    	FileOutputStream fos = null; 
+	    	ObjectOutputStream oss = null; 
+		
+	     	try 
+	      	{ 
+	         	if(new File(string).exists())
+	         	{ 
+	          	 	fos = new FileOutputStream(string, true);     
+	          	  	oss = new MyObjectOutputStream(fos);
+	         	}else{
+	            		fos = new FileOutputStream(string, true);     
+	            		oss = new ObjectOutputStream(fos); 
+	         	}
+		      
+		 	if(v.size()==0){
+	             		System.out.println("수정할 품목이 없습니다. ");
+	             		return;
+	 	     	}
+			System.out.println("수정할 구입내역의 번호를 입력하세요. ");
 	 		 
 	 		int num;
-	 		do{
+			do{
 	 			num = scan.nextInt()-1;
-	 			if(num<0 || num >v.size()-1)
-	             	System.out.println("번호를 다시 입력하세요.");
+				if(num<0 || num >v.size()-1)
+					System.out.println("번호를 다시 입력하세요.");
+				
 	 		}while(num<0 || num >v.size()-1);
 	 		
 	 		System.out.println("번호\t구입날짜 \t상품명\t상품가격   ");
 	 		System.out.printf("[%d]%10d%10s%10d\n"
-	 				,i+1,v.get(i).getday(),v.get(i).getname(),v.get(i).getprice());	
+	 			,i+1,v.get(i).getday(),v.get(i).getname(),v.get(i).getprice());	
 	 		System.out.println("수정할 항목의 번호를 입력하세요.");
 	 		System.out.println("1.구입날짜\n2.상품명\n3.상품가격");
 	 		
 	 		int cas;
 	 		do{
 	 			cas=scan.nextInt();
-	 			v= update(v,num,cas);
-	 			
+	 			v= update(v,num,cas);	
+				
 	 		}while(cas<1||cas>3);
-	         oss.writeObject(v);
-	         oss.flush(); 
-	         oss.close(); 
-	         fos.close(); 
-	      } catch (FileNotFoundException e) 
-	      { 
-	         e.printStackTrace(); 
-	      } catch (IOException e) 
-	      { 
-	         e.printStackTrace(); 
-	      } 
+			
+	        	 oss.writeObject(v);
+	        	 oss.flush(); 
+	        	 oss.close(); 
+	        	 fos.close(); 
+	      
+		} catch (FileNotFoundException e) 
+	      	{ 
+	         	e.printStackTrace(); 
+			
+	      	} catch (IOException e) 
+	      	{ 
+	        	 e.printStackTrace(); 
+	      	} 
 		return;
 	}
 	/*-----------------------------------------------------------------------------*/
 
 	public static Vector<item> update(Vector<item> v,int num,int cas){
+		
 		Scanner scan = new Scanner(System.in);
 		int day, price;
 		String name;
 		if(cas==1){
+			
 			System.out.println("구입날짜:");
 			day = scan.nextInt();
 			v.get(num).setday(day);
+			
 		}else if(cas==2){
+			
 			System.out.println("상품명:");
 			name = scan.next();
 			v.get(num).setname(name);
+			
 		}else if (cas==3){
+			
 			System.out.println("상품가격:");
 			price = scan.nextInt();
 			v.get(num).setprice(price);
+			
 		}else{
 			System.out.println("1번~3번 사이에서 입력해주세요.");
 		}
@@ -624,19 +644,24 @@ class Accountbook { // 가계부 관리 메뉴
 	}
 		
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	public static void addaccount(Vector<item> v) throws IOException{	// 가계부 작성
+	public static void addaccount(Vector<item> v) throws IOException{// 가계부 작성
+		
 		Scanner scan = new Scanner(System.in);
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("account.txt"));
-		System.out.print("구입내역의 정보를 입력하세요. ");
+		
+		System.out.println("구입내역의 정보를 입력하세요. ");
 		int day, price;
 		String name;
+		
 		System.out.print("구입날짜:" );
 		day = scan.nextInt();
 		System.out.print("상품명:" );
 		name = scan.next();
 		System.out.print("상품가격:" );
 		price = scan.nextInt();
+		
 		v = adding(v,day,name,price);
+		
 		oos.writeObject(v);
 		oos.close();
 		return;
@@ -648,17 +673,17 @@ class Accountbook { // 가계부 관리 메뉴
 	}
 }//AccountBook
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class MyObjectOutputStream extends ObjectOutputStream 
-{ 
-   public MyObjectOutputStream(OutputStream out) throws IOException 
-   { 
-      super(out); 
-   } 
-   @Override 
-   protected void writeStreamHeader() throws IOException 
-   {  
-   } 
-} 
+	class MyObjectOutputStream extends ObjectOutputStream 
+	{ 
+ 	  public MyObjectOutputStream(OutputStream out) throws IOException 
+  	{ 
+   	   super(out); 
+   	} 
+   	@Override 
+   	protected void writeStreamHeader() throws IOException 
+   	{  
+   	} 
+	} 
 //========================================================================================================================================//
 public class swTest {	//	메인 메뉴
 
@@ -683,8 +708,8 @@ public class swTest {	//	메인 메뉴
 			new calculator();
 			}// 계산기 메뉴 호출
 		else if (sel==3){
-				Accountbook.mainaccount();
-            }// 가계부 메뉴 호출
+			Accountbook.mainaccount();
+           		 }// 가계부 메뉴 호출
 		else if (sel==4) { // 종료
 			break;
 			}
